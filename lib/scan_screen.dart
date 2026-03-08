@@ -53,15 +53,15 @@ class _ScanScreenState extends State<ScanScreen> {
   final Guid targetService = Guid("10000000-20e2-40cc-85ae-870e7523ab20");
 
   Future onScanPressed() async {
-    try {
-      // `withServices` is required on iOS for privacy purposes, ignored on android.
-      var withServices = [Guid("180f")]; // Battery Level Service
-      _systemDevices = await FlutterBluePlus.systemDevices(withServices);
-    } catch (e, backtrace) {
-      Snackbar.show(ABC.b, prettyException("System Devices Error:", e), success: false);
-      print(e);
-      print("backtrace: $backtrace");
-    }
+    // try {
+    //   // `withServices` is required on iOS for privacy purposes, ignored on android.
+    //   var withServices = [Guid("180f")]; // Battery Level Service
+    //   _systemDevices = await FlutterBluePlus.systemDevices(withServices);
+    // } catch (e, backtrace) {
+    //   Snackbar.show(ABC.b, prettyException("System Devices Error:", e), success: false);
+    //   print(e);
+    //   print("backtrace: $backtrace");
+    // }
     try {
       await FlutterBluePlus.startScan(
         timeout: const Duration(seconds: 15),
@@ -94,11 +94,12 @@ class _ScanScreenState extends State<ScanScreen> {
   }
 
   void onConnectPressed(BluetoothDevice device) {
-    device.connect(license: License.commercial, autoConnect: false).ignore();
-    // device.connectAndUpdateStream()
-    //     .catchError((e) {
-    //   Snackbar.show(ABC.c, prettyException("Connect Error:", e), success: false);
-    // });
+    // device.connect(license: License.commercial, autoConnect: false).ignore();
+    device.connectAndUpdateStream()
+        .catchError((e) {
+      Snackbar.show(ABC.c, prettyException("Connect Error:", e), success: false);
+    });
+
     MaterialPageRoute route = MaterialPageRoute(
         builder: (context) => DeviceScreen(device: device), settings: RouteSettings(name: '/DeviceScreen'));
     Navigator.of(context).push(route);

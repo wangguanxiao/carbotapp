@@ -164,6 +164,16 @@ class _DeviceScreenState extends State<DeviceScreen> {
         .toList();
   }
 
+  List<Widget> _buildDeviceInfoTiles(BuildContext context, BluetoothDevice d) {
+    if (_services.isEmpty) {
+      return [Container()];
+    }
+    var targetUuid = '00000005-20e2-40cc-85ae-870e7523ab20';
+    BluetoothService service = _services.firstWhere((s) =>  s.uuid.str == targetUuid );
+
+    return [Container(child: Text(""),)];
+ }
+
   CharacteristicTile _buildCharacteristicTile(BluetoothCharacteristic c) {
     return CharacteristicTile(
       characteristic: c,
@@ -269,6 +279,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
               ),
               buildMtuTile(context),
               ..._buildServiceTiles(context, widget.device),
+              ..._buildDeviceInfoTiles(context, widget.device),
             ],
           ),
         ),
